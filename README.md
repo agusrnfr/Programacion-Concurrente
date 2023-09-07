@@ -1,7 +1,6 @@
 # Programacion-Concurrente
-Ejercicios de "Programación Concurrente"
- <p align="center">
-  <img src= "https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Ffdf77d80-bc7e-43d5-aac7-708c90306676_540x450.gif" alt = "taylor swift te amo"/>
+<p align="center">
+  <img src= "https://miro.medium.com/v2/resize:fit:1400/1*-6anm65Ea3w-WkdMxp1NiA.gif" alt = "taylor swift te amo"/>
 </p>
 
 ## Prácticas
