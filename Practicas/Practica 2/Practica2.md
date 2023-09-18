@@ -569,6 +569,58 @@ fábrica empieza a producir una vez que todos los empleados llegaron. Mientras h
 ### Respuesta
 _Nota: Este ejercicio fue consultado y esta bien resuelto._
 
+```cpp
+sem mutex = 1;
+sem barrera = 0;
+sem mutexFinalizo = 1;
+sem detpremio = 0;
+int cantidad = 0;
+int piezas = 0;
+int contadorEmpleado[E] = ([E] 0);
+int finalizo = 0;
+int premio = 0;
+sem despiertoEmpresa = 0;
+
+Process empleado [i:0..E-1]{
+    bool felicidad = false;
+    P(mutex);
+    cantidad++;
+    if (cantidad == E){
+        for j = 1..E -> V(barrera);
+    }
+    V(mutex);
+    P(barrera);
+    P(mutex);
+    while (piezas < T) {
+        //tomar pieza
+        piezas++;
+        V(mutex);
+        //fabricar pieza
+        contadorEmpleado[i]++;
+        P(mutex);
+    }
+    V(mutex);
+    P(mutexFinalizo);
+    finalizo++;
+    if (finalizo == E){
+        V(despiertoEmpresa);
+    }
+    V(mutexFinalizo);
+    P(detpremio);
+    if (premio == i){
+        felicidad = true;
+    }
+}
+
+Process empresa{
+    int j;
+    P(despiertoEmpresa);
+    premio = contadorEmpleado.indexOf(contadorEmpleado.max());
+    for j = 1..E -> V(detpremio);
+}
+
+```
+
 ## Ejercicio 9
 Resolver el funcionamiento en una fábrica de ventanas con 7 empleados (4 carpinteros, 1 vidriero y 2 armadores) que trabajan de la siguiente manera:
 * Los carpinteros continuamente hacen marcos (cada marco es armando por un único carpintero) y los deja en un depósito con capacidad de almacenar 30 marcos.
@@ -579,6 +631,65 @@ Resolver el funcionamiento en una fábrica de ventanas con 7 empleados (4 carpin
 
 ### Respuesta
 
+```cpp
+sem capacidad_marcos = 30;
+sem capacidad_vidrios= 50;
+sem mutex_marco = 1;
+sem mutex_vidrio = 1;
+sem hay_marco = 0;
+sem hay_vidrio = 0;
+sem mutex_ventana = 1;
+colaMarcos cM;
+colaVidrios cV;
+colaVentana cVentana;
+
+Process carpintero[i:0..3]{
+    Marco marco;
+    while (true){
+        P(capacidad_marcos);
+        marco = hacerMarco();
+        P(mutex_marco);
+        cM.push(marco);
+        V(mutex_marco);
+        V(hay_marco);
+    }
+}
+
+Process vidriero{
+    Vidrio vidrio;
+    while (true){
+        P(capacidad_vidrios);
+        vidrio = hacerVidrio();
+        P(mutex_vidrio);
+        cV.push(vidrio);
+        V(mutex_vidrio);
+        V(hay_vidrio);
+    }
+}
+
+Process armador[i:0..1]{
+    Marco marco;
+    Vidrio vidrio;
+    Ventana ventana;
+    while (true){
+        P(hay_marco);
+        P(mutex_marco);
+        marco = cM.pop();
+        V(mutex_marco);
+        V(capacidad_marcos);
+        P(hay_vidrio);
+        P(mutex_vidrio);
+        vidrio = cV.pop();
+        V(mutex_vidrio);
+        V(capacidad_vidrios);
+        ventana = armarVentana(marco, vidrio);
+        P(mutex_ventana);
+        cVentana.push(ventana);
+        V(mutex_ventana);
+    }
+}
+```
+
 ## Ejercicio 10
 A una cerealera van T camiones a descargarse trigo y M camiones a descargar maíz. Sólo hay lugar para que 7 camiones a la vez descarguen, pero no pueden ser más de 5 del mismo
 tipo de cereal.
@@ -586,6 +697,28 @@ tipo de cereal.
 _**Nota:**_ no usar un proceso extra que actué como coordinador, resolverlo entre los camiones.
 
 ### Respuesta
+
+```cpp
+sem camiones = 7;
+sem trigo = 5;
+sem maiz = 5;
+
+Process camionTrigo[i:0..T-1]{
+    P(trigo);
+    P(camiones);
+    //descargar trigo
+    V(camiones);
+    V(trigo);
+}
+
+Process camionMaiz[i:0..M-1]{
+    P(maiz);
+    P(camiones);
+    //descargar maiz
+    V(camiones);
+    V(maiz);
+}
+```
 
 ## Ejercicio 11
 En un vacunatorio hay **un empleado** de salud para vacunar a **50 personas**. El empleado de salud atiende a las personas de acuerdo con el orden de llegada y de a 5 personas a la
@@ -596,6 +729,45 @@ _**Nota:**_ todos los procesos deben terminar su ejecución; asegurarse de no re
 ### Respuesta
 _Nota: Este ejercicio fue consultado y esta bien resuelto._
 
+```cpp
+sem mutex = 1; 
+sem despierto_empleado = 0;
+sem esperaVacuna [50] = ([50] 0);
+cola c; 
+int cantidad = 0;
+
+Process persona[id:0..49]{
+    P(mutex);
+    cantidad++;
+    c.push(id);
+    if (cantidad == 5){
+        V(despierto_empleado);
+        cantidad = 0;
+    }
+    V(mutex);
+    P(esperaVacuna[id]);
+}
+
+Process empleado{
+    int i,j,aux;
+    cola yaVacunados;
+    for i = 1..10{
+        P(despierto_empleado);
+        for j = 1..5{
+            P(mutex);
+            aux = c.pop();
+            V(mutex);
+            VacunarPersona(aux);
+            yaVacunados.push(aux);
+        }
+        for j = 1..5{
+            aux = yaVacunados.pop();
+            V(esperaVacuna[aux]);
+        }
+    }
+}
+```
+
 ## Ejercicio 12
 Simular la atención en una Terminal de Micros que posee 3 puestos para hisopar a **150 pasajeros**. En cada puesto hay **una Enfermera** que atiende a los pasajeros de acuerdo con el orden de llegada al mismo. Cuando llega un pasajero se dirige al puesto que tenga menos gente esperando. Espera a que la enfermera correspondiente lo llame para hisoparlo, y luego se retira.
 
@@ -605,3 +777,46 @@ Además, suponer que existe una función `Hisopar()` que simula la atención del
 ### Respuesta
 
 _Nota: Este ejercicio fue consultado y esta bien resuelto._
+
+```cpp
+sem mutex = 1;
+sem espera_per[150] = ([150] 0);
+sem llena[3] = ([3] 0);
+cola colaEspera[3]; //Array de colas
+int hisopados = 0;
+sem mutexHisop = 1;
+
+Process pasajero[id:0..149]{
+    int cola;
+    P(mutex);
+    cola = obtenerColaMasVacia(colaEspera);
+    cola.push(id);
+    V(llena[cola]);
+    V(mutex);
+    P(espera_per[id]);
+    // Esta siendo hisopado
+    P(espera_per[id]);
+}
+
+Process enfermera[id:0..2]{
+    int pasajero;
+    int j;
+    while(hisopados < 150){
+        P(llena[i]);
+        if (!colaEspera[id].isEmpty()){
+            P(mutex);
+            pasajero = colaEspera[id].pop();
+            V(mutex);
+            V(espera_per[pasajero]);
+            Hisopar(pasajero);
+            V(espera_per[pasajero]);
+            P(mutexHisop);
+            hisopados++;
+            if (hisopados == 150){
+                for j = 0..2 -> V(llena[j]);
+            }
+            V(mutexHisop);
+        }
+    }
+}
+```
