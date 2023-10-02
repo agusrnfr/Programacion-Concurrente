@@ -524,6 +524,7 @@ sem barreraAlumnos = 0;
 sem despiertoMaestro = 0;
 sem seDioPuntaje[10] = ([10] 0);
 int puntajeTarea[10] = ([10] 0);
+int contador = 0;
 cola finalizadas;
 
 Process alumno[i:0..49]{
