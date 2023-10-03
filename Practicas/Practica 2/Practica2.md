@@ -781,7 +781,7 @@ _Nota: Este ejercicio fue consultado y esta bien resuelto._
 
 ```cpp
 sem mutex = 1;
-sem mutexCola[3] = ([3] 0);
+sem mutexCola[3] = ([3] 1);
 sem espera_per[150] = ([150] 0);
 sem llena[3] = ([3] 0);
 cola colaEspera[3]; //Array de colas
