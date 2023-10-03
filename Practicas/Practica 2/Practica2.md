@@ -781,6 +781,7 @@ _Nota: Este ejercicio fue consultado y esta bien resuelto._
 
 ```cpp
 sem mutex = 1;
+sem mutexCola[3] = ([3] 0);
 sem espera_per[150] = ([150] 0);
 sem llena[3] = ([3] 0);
 cola colaEspera[3]; //Array de colas
@@ -791,9 +792,12 @@ Process pasajero[id:0..149]{
     int cola;
     P(mutex);
     cola = obtenerColaMasVacia(colaEspera);
-    cola.push(id);
-    V(llena[cola]);
     V(mutex);
+    P(mutexCola[cola])
+    colaEspera[cola].push(id);
+    V(mutexCola[cola])
+    V(llena[cola]);
+
     P(espera_per[id]);
     // Esta siendo hisopado
     P(espera_per[id]);
@@ -805,9 +809,9 @@ Process enfermera[id:0..2]{
     while(hisopados < 150){
         P(llena[i]);
         if (!colaEspera[id].isEmpty()){
-            P(mutex);
+            P(mutexCola[id]);
             pasajero = colaEspera[id].pop();
-            V(mutex);
+            V(mutexCola[id]);
             V(espera_per[pasajero]);
             Hisopar(pasajero);
             V(espera_per[pasajero]);
