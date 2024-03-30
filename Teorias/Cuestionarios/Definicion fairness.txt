@@ -1,0 +1,76 @@
+13-	¿Qué es una política de scheduling? Relacione con fairness. ¿Qué tipos de fairnes conoce?
+
+Una política de scheduling se refiere a un conjunto de reglas y algoritmos utilizados para determinar cuál será el próximo proceso o hilo que se ejecutará en un sistema concurrente o en un sistema operativo. Cuando se habla de ejecutar el próximo proceso o hilo, se esta hablando de ejecutar las acciones atómicas de dicho proceso.
+
+Fairness se relaciona con la equidad en la ejecución de procesos o hilos en un sistema concurrente. Se esfuerza por garantizar que todos los procesos tengan la oportunidad de avanzar y realizar sus operaciones, evitando situaciones de bloqueo o inanición.
+
+Fairness trata de garantizar que los procesos tengan chance de avanzar, sin importar lo que hagan los demás, es decir, que se ejecuten acciones atómicas de todos lo procesos.
+
+Tipos de Fairness:
+
+Fairness Incondicional: Una política de scheduling es incondicionalmente fair si toda acción atómica incondicional que es elegible eventualmente es ejecutada.
+Fairness Débil: Una política de scheduling es débilmente fair si : 
+(1) Es incondicionalmente fair y 
+(2) Toda acción atómica condicional que se vuelve elegible eventualmente es ejecutada, asumiendo que su condición se vuelve true y permanece true hasta que es vista por el proceso que ejecuta la acción atómica condicional.
+
+Fairness Fuerte: Una política de scheduling es fuertemente fair si: 
+(1) Es incondicionalmente fair y 
+(2) Toda acción atómica condicional que se vuelve elegible eventualmente es ejecutada pues su guarda se convierte en true con infinita frecuencia.
+
+Explicación de chatGPT porque no las entendí mucho:
+
+Fairness Incondicional: Esta política garantiza que toda acción atómica elegible eventualmente se ejecute, sin importar las condiciones o restricciones. Se enfoca en garantizar que todas las acciones tengan una oportunidad justa de ejecutarse.
+
+Fairness Débil: Además de ser incondicionalmente justa, esta política también garantiza que las acciones atómicas condicionales que se vuelven elegibles eventualmente se ejecuten siempre que su condición se cumpla. Esto evita que las acciones condicionales queden en espera indefinidamente si su condición se cumple.
+
+Fairness Fuerte: Es la política más exigente en términos de equidad. Además de ser incondicionalmente justa, garantiza que las acciones atómicas condicionales se ejecuten con una frecuencia infinita si su condición se cumple. Esto evita que las acciones condicionales queden en espera incluso si su condición se cumple raramente.
+
+-------------------------------------------------------------------------------------------------------------------
+
+Fairness Incondicional:
+
+Garantiza que toda acción atómica elegible eventualmente se ejecute, independientemente de las condiciones o restricciones.
+Se centra en proporcionar una oportunidad justa para todas las acciones sin importar sus condiciones.
+No tiene en cuenta si las condiciones de las acciones condicionales se cumplen o no, todas las acciones elegibles se ejecutarán en algún momento.
+Fairness Débil:
+
+Además de ser incondicionalmente justa, también se preocupa por las acciones condicionales.
+Garantiza que las acciones atómicas condicionales que se vuelven elegibles eventualmente se ejecuten siempre que su condición se cumpla.
+Evita que las acciones condicionales queden en espera indefinidamente si su condición se cumple.
+Fairness Fuerte:
+
+La política más exigente en términos de equidad.
+Además de ser incondicionalmente justa, garantiza que las acciones atómicas condicionales se ejecuten con una frecuencia infinita si su condición se cumple.
+Evita que las acciones condicionales queden en espera, incluso si su condición se cumple raramente.
+
+-------------------------------------------------------------------------------------------------------------------
+
+Fairness Incondicional. Una política de scheduling es incondicionalmente fair si toda acción atómica incondicional que es elegible eventualmente es ejecutada.
+
+Fairness Débil. Una política de scheduling es débilmente fair si es incondicionalmente fair y toda acción atómica condicional que se vuelve elegible eventualmente es ejecutada si su guarda se convierte en true y de allí en adelante permanece true.
+
+Fairness Fuerte. Una política de scheduling es fuertemente fair si es incondicionalmente fair y toda acción atómica condicional que se vuelve elegible eventualmente es ejecutada si su guarda es true con infinita frecuencia.
+
+-------------------------------------------------------------------------------------------------------------------
+
+Fairness incondicional: significa que todas las tareas que están listas para ejecutarse eventualmente se ejecutan, sin importar si son condicionales o no. 
+
+Fairness débil: significa que además de la fairness incondicional, las tareas condicionales que se vuelven elegibles se ejecutan, siempre y cuando su condición se mantenga verdadera hasta que la tarea sea asignada.
+
+Fairness fuerte: significa que además de la fairness incondicional, las tareas condicionales que se vuelven elegibles se ejecutan, incluso si su condición cambia de valor muchas veces.
+
+
+
+1-	¿Por qué las propiedades de vida dependen de la política de scheduling? ¿Cómo aplicaría el concepto de fairness al acceso a una base de datos compartida por n procesos concurrentes?
+
+Las propiedades de vida se centran en garantizar que los procesos puedan avanzar y completar sus tareas, evitando situaciones de bloqueo y asegurando que las acciones críticas se ejecuten eventualmente.  Dependen de la política de scheduling porque esta última determina el comportamiento de la ejecución de procesos concurrentes, y diferentes políticas de scheduling pueden afectar la equidad y la capacidad de los procesos para avanzar y completar sus tareas. 
+
+chatGPT
+
+Aplicación de Fairness al Acceso a una Base de Datos Compartida: El concepto de fairness se puede aplicar al acceso a una base de datos compartida por n procesos concurrentes de la siguiente manera:
+
+Fairness Incondicional: En este contexto, significa garantizar que cada proceso tenga la oportunidad de acceder a la base de datos compartida en algún momento. Ningún proceso debería ser excluido indefinidamente del acceso a la base de datos.
+
+Fairness Débil: Además de garantizar el acceso a la base de datos, también implica asegurarse de que todos los procesos tengan la oportunidad de realizar operaciones en la base de datos, independientemente de sus condiciones o restricciones. Por ejemplo, si un proceso espera una condición específica para acceder a la base de datos, la política de scheduling debe garantizar que, si la condición se cumple, el proceso pueda acceder a la base de datos.
+
+Fairness Fuerte: Va un paso más allá y asegura que, si un proceso tiene una condición para acceder a la base de datos y esa condición se cumple en algún momento, el proceso obtendrá acceso a la base de datos con suficiente frecuencia, incluso si la condición es rara.
